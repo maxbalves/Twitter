@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *idStr; // For favoriting, retweeting & replying
 @property (nonatomic, strong) NSString *text; // Text content of tweet
+@property (nonatomic) int replyCount; // Update reply count label
 @property (nonatomic) int favoriteCount; // Update favorite count label
 @property (nonatomic) BOOL favorited; // Configure favorite button
 @property (nonatomic) int retweetCount; // Update favorite count label
