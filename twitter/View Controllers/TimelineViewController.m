@@ -22,13 +22,8 @@
 
 @implementation TimelineViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
+- (void) getTimeline:(UIRefreshControl *)refreshControl {
+    [refreshControl beginRefreshing];
     
     // Get timeline
     [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
@@ -42,10 +37,28 @@
             }
             
             [self.tableView reloadData];
+            
+            [refreshControl endRefreshing];
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
     }];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    
+    UIRefreshControl *refreshControl = [UIRefreshControl new];
+            
+    [refreshControl addTarget:self action:@selector(getTimeline:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView insertSubview:refreshControl atIndex:0];
+    
+    [self getTimeline:(UIRefreshControl *)refreshControl];
 }
 
 - (void)didReceiveMemoryWarning {
