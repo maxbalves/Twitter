@@ -98,8 +98,8 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="300" verticalCompressionResistancePriority="900" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="viX-Ek-WrS">
-                                                    <rect key="frame" x="73" y="33" width="41.333333333333343" height="20.333333333333329"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <rect key="frame" x="73" y="33" width="35.333333333333343" height="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -108,12 +108,18 @@
                                                     <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" image="favor-icon" title="0" imagePadding="0.0"/>
+                                                    <connections>
+                                                        <action selector="didTapFavorite:" destination="gz2-ka-ZnQ" eventType="touchUpInside" id="ddY-fc-Qtr"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7On-Zk-iCN">
                                                     <rect key="frame" x="96" y="394" width="63" height="44"/>
                                                     <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" image="retweet-icon" title="0"/>
+                                                    <connections>
+                                                        <action selector="didTapRetweet:" destination="gz2-ka-ZnQ" eventType="touchUpInside" id="ad1-9C-GMW"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Oz-pa-shi">
                                                     <rect key="frame" x="181.66666666666666" y="9.3333333333333321" width="31" height="14.333333333333332"/>
@@ -172,7 +178,7 @@
                                             <outlet property="name" destination="Vac-e5-zL8" id="cZL-60-WRh"/>
                                             <outlet property="profilePicture" destination="Rjm-y4-ZCy" id="F2Z-St-IVX"/>
                                             <outlet property="replyButton" destination="vaP-79-lDK" id="9et-br-W8m"/>
-                                            <outlet property="retweetButton" destination="7On-Zk-iCN" id="B9n-y3-LDz"/>
+                                            <outlet property="retweetButton" destination="7On-Zk-iCN" id="fJ4-18-YD6"/>
                                             <outlet property="tweetText" destination="viX-Ek-WrS" id="Spo-mF-UyW"/>
                                             <outlet property="username" destination="489-pm-NWI" id="sNI-2p-ZcR"/>
                                         </connections>

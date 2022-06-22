@@ -28,7 +28,6 @@
     [self.arrayOfTweets insertObject:tweet atIndex:0];
     
     [self.tableView reloadData];
-    NSLog(@"Reloaded data after compose!");
 }
 
 - (void) getTimeline:(UIRefreshControl *)refreshControl {
@@ -82,7 +81,6 @@
     LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
     appDelegate.window.rootViewController = loginViewController;
     [[APIManager shared] logout];
-    NSLog(@"Successfully logged out!");
 }
 
 - (TweetCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -96,8 +94,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.arrayOfTweets.count >= 20 ? 20 : self.arrayOfTweets.count;
 }
-
-
 
 //#pragma mark - Navigation
 

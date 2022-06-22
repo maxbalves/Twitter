@@ -42,7 +42,6 @@
         if (error) {
             NSLog(@"Error composing Tweet: %@", error.localizedDescription);
         } else {
-            NSLog(@"Compose Tweet Success!");
             [self.delegate didTweet:tweet];
             [self clickedClose:self.closeButton];
         }
