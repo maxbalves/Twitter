@@ -13,12 +13,14 @@
 #import "Tweet.h"
 #import "TweetCell.h"
 #import "ComposeViewController.h"
+#import "DetailViewController.h"
 
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *arrayOfTweets;
 @property (strong, nonatomic) IBOutlet UIButton *tweetButton;
+
 
 @end
 
@@ -38,6 +40,9 @@
         if (tweets) {
             self.arrayOfTweets = (NSMutableArray *)tweets;
             
+            //for (Tweet *tweet in self.arrayOfTweets)
+            //    NSLog(@"%@", tweet.text);
+            
             [self.tableView reloadData];
             
             [refreshControl endRefreshing];
@@ -45,6 +50,10 @@
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
     }];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLoad {
@@ -101,9 +110,14 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    UINavigationController *navigationController = [segue destinationViewController];
-    ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
-    composeController.delegate = self;
+    if ([segue.identifier isEqualToString:@"ComposeSegue"]) {
+        UINavigationController *navigationController = [segue destinationViewController];
+        ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+        composeController.delegate = self;
+    } else if ([segue.identifier isEqualToString:@"DetailSegue"]){
+        DetailViewController *detailController = [segue destinationViewController];
+        detailController.tweet = self.arrayOfTweets[[self.tableView indexPathForCell:sender].row];
+    }
 }
 
 

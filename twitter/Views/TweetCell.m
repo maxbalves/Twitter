@@ -46,10 +46,11 @@
     self.date.text = self.tweet.createdAtString;
     
     // Reply Button Text
-    NSString *replyCount = [NSString stringWithFormat:@"%d", self.tweet.replyCount];
-    [self.replyButton setTitle:replyCount forState:UIControlStateNormal];
-    [self.replyButton setTitle:replyCount forState:UIControlStateSelected];
-    [self.replyButton setTitle:replyCount forState:UIControlStateHighlighted];
+    // Reply Count is not able to be retrieved by the API
+    // NSString *replyCount = [NSString stringWithFormat:@"%d", self.tweet.replyCount];
+    [self.replyButton setTitle:@"" forState:UIControlStateNormal];
+    [self.replyButton setTitle:@"" forState:UIControlStateSelected];
+    [self.replyButton setTitle:@"" forState:UIControlStateHighlighted];
     
     // Like Button Text
     NSString *likeCount = [NSString stringWithFormat:@"%d", self.tweet.favoriteCount];

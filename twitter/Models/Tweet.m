@@ -8,6 +8,7 @@
 
 #import "Tweet.h"
 #import "User.h"
+#import "DateTools.h"
 
 @implementation Tweet
 
@@ -25,8 +26,8 @@
             dictionary = originalTweet;
         }
         self.idStr = dictionary[@"id_str"];
-        self.text = dictionary[@"text"];
-        self.replyCount = [dictionary[@"reply_count"] intValue];
+        self.text = dictionary[@"full_text"];
+        self.replyCount = [dictionary[@"reply_count"] intValue];        
         self.favoriteCount = [dictionary[@"favorite_count"] intValue];
         self.favorited = [dictionary[@"favorited"] boolValue];
         self.retweetCount = [dictionary[@"retweet_count"] intValue];
@@ -47,7 +48,12 @@
         formatter.dateStyle = NSDateFormatterShortStyle;
         formatter.timeStyle = NSDateFormatterNoStyle;
         // Convert Date to String
-        self.createdAtString = [formatter stringFromDate:date];
+        
+        self.createdAtString = date.shortTimeAgoSinceNow;
+        
+        // If more than a day ago, use MM/DD/YY format
+        if ([self.createdAtString containsString:@"d"])
+            self.createdAtString = [formatter stringFromDate:date];
     }
     return self;
 }
