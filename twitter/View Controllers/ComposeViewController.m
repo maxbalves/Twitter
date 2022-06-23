@@ -10,7 +10,7 @@
 #import "APIManager.h"
 
 
-@interface ComposeViewController ()
+@interface ComposeViewController () <UITextViewDelegate>
 @property (strong, nonatomic) IBOutlet UITextView *text;
 @property (strong, nonatomic) IBOutlet UIButton *closeButton;
 
@@ -18,8 +18,22 @@
 
 @implementation ComposeViewController
 
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    // Set the max character limit
+    int characterLimit = 140;
+
+    // Construct what the new text would be if we allowed the user's latest edit
+    NSString *newText = [self.text.text stringByReplacingCharactersInRange:range withString:text];
+    
+    // Should the new text should be allowed? True/False
+    return newText.length < characterLimit;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.text.delegate = self;
+
     
     // Remove any text from  close button
     [self.closeButton setTitle:@"" forState:UIControlStateNormal];
