@@ -6,7 +6,10 @@
 //  Copyright © 2018 Emerson Malca. All rights reserved.
 //
 
+// Delegates (Not Sure of Category)
 #import "AppDelegate.h"
+
+// APIs
 #import "APIManager.h"
 
 @interface AppDelegate ()

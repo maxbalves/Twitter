@@ -6,8 +6,11 @@
 //  Copyright © 2018 Emerson Malca. All rights reserved.
 //
 
+// APIs
 #import "APIManager.h"
-#import "Tweet.h"
+
+// ViewModels
+#import "TweetViewModel.h"
 
 static NSString * const baseURLString = @"https://api.twitter.com";
 
@@ -49,13 +52,13 @@ static NSString * const baseURLString = @"https://api.twitter.com";
     return self;
 }
 
-- (void)getHomeTimelineWithCompletion:(void(^)(NSArray *tweets, NSError *error))completion {
+- (void)getHomeTimelineWithCompletion:(void(^)(NSArray *tweetVMs, NSError *error))completion {
     NSDictionary *parameter = @{@"tweet_mode": @"extended"};
     [self GET:@"1.1/statuses/home_timeline.json"
        parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSArray *  _Nullable tweetDictionaries) {
            // Success
-           NSMutableArray *tweets = [Tweet tweetsWithArray:tweetDictionaries];
-           completion(tweets, nil);
+           NSArray *tweetVMs = [TweetViewModel tweetViewsWithArray:tweetDictionaries];
+           completion(tweetVMs, nil);
        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
            // There was a problem
            completion(nil, error);
@@ -63,44 +66,44 @@ static NSString * const baseURLString = @"https://api.twitter.com";
 }
 
 // Post Composed Tweet Method
-- (void)postStatusWithText:(NSString *)text completion:(void (^)(Tweet *, NSError *))completion {
+- (void)postStatusWithText:(NSString *)text completion:(void (^)(TweetViewModel *, NSError *))completion {
     NSString *urlString = @"1.1/statuses/update.json";
     NSDictionary *parameters = @{@"status": text, @"tweet_mode": @"extended"};
     
     [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
-        Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
-        completion(tweet, nil);
+        TweetViewModel *tweetVM = [[TweetViewModel alloc] initWithDict:tweetDictionary];
+        completion(tweetVM, nil);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         completion(nil, error);
     }];
 }
 
 // Favorite/Like (or Unfavorite/Unlike) Tweet Method
-- (void)favorite:(Tweet *)tweet alreadyFavorited:(BOOL)isFavorited completion:(void (^)(Tweet *, NSError *))completion {
-    NSString *favoriteOrDestroy = @"create";
-    if (isFavorited == YES)
-        favoriteOrDestroy = @"destroy";
+- (void)favorite:(TweetViewModel *)tweetVM completion:(void (^)(TweetViewModel *, NSError *))completion {
+    NSString *favoriteOrDestroy = @"destroy";
+    if (tweetVM.tweet.favorited)
+        favoriteOrDestroy = @"create";
     
     NSString *urlString = [NSString stringWithFormat:@"1.1/favorites/%@.json", favoriteOrDestroy];
-    NSDictionary *parameters = @{@"id": tweet.idStr};
+    NSDictionary *parameters = @{@"id": tweetVM.tweet.idStr};
     [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
-        Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
-        completion(tweet, nil);
+        TweetViewModel *tweetVM = [[TweetViewModel alloc] initWithDict:tweetDictionary];
+        completion(tweetVM, nil);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         completion(nil, error);
     }];
 }
 
 // Retweet (or Unretweet) Tweet Method
-- (void)retweet:(Tweet *)tweet alreadyRetweeted:(BOOL)isRetweeted completion:(void (^)(Tweet *, NSError *))completion {
-    NSString *retweetOrUnretweet = @"retweet";
-    if (isRetweeted == YES)
-        retweetOrUnretweet = @"unretweet";
+- (void)retweet:(TweetViewModel *)tweetVM completion:(void (^)(TweetViewModel *, NSError *))completion {
+    NSString *retweetOrUnretweet = @"unretweet";
+    if (tweetVM.tweet.retweeted)
+        retweetOrUnretweet = @"retweet";
     
-    NSString *urlString = [NSString stringWithFormat:@"1.1/statuses/%@/%@.json", retweetOrUnretweet, tweet.idStr];
+    NSString *urlString = [NSString stringWithFormat:@"1.1/statuses/%@/%@.json", retweetOrUnretweet, tweetVM.tweet.idStr];
     [self POST:urlString parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
-        Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
-        completion(tweet, nil);
+        TweetViewModel *tweetVM = [[TweetViewModel alloc] initWithDict:tweetDictionary];
+        completion(tweetVM, nil);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         completion(nil, error);
     }];

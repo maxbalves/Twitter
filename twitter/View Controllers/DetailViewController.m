@@ -6,10 +6,15 @@
 //  Copyright © 2022 Emerson Malca. All rights reserved.
 //
 
-#import "DetailViewController.h"
+// APIs
 #import "APIManager.h"
-#import "UIImageView+AFNetworking.h"
+
+// View Controllers
 #import "ComposeViewController.h"
+#import "DetailViewController.h"
+
+// Frameworks
+#import "UIImageView+AFNetworking.h"
 
 @interface DetailViewController ()
 
@@ -30,129 +35,56 @@
 @implementation DetailViewController
 
 - (IBAction)didTapRetweet:(id)sender {
-    // Unretweet
-    if (self.tweet.retweeted == YES) {
-        //Update image
-        UIImage *notRetweetedImage = [UIImage imageNamed:@"retweet-icon.png"];
-        [self.retweetButton setImage:notRetweetedImage forState:UIControlStateNormal];
-        
-        // Update the local tweet model
-        self.tweet.retweeted = NO;
-        self.tweet.retweetCount -= 1;
-        
-        // Update cell UI
-        NSString *retwCount = [NSString stringWithFormat:@"%d", self.tweet.retweetCount];
-        self.retweetCount.text = [retwCount stringByAppendingFormat:@" RETWEETS"];
-        
-        // Send a POST requrest to the POST statuses/unretweet/:id endpoint
-        [[APIManager shared] retweet:self.tweet alreadyRetweeted:YES completion:^(Tweet *tweet, NSError *error) {
-            if (error) {
-                NSLog(@"Error unretweeting tweet: %@", error.localizedDescription);
-             } else {
-                 // nothing, all good
-             }
-         }];
-    } else { // Retweet
-        // Update image
-        UIImage *retweetedImage = [UIImage imageNamed:@"retweet-icon-green.png"];
-        [self.retweetButton setImage:retweetedImage forState:UIControlStateNormal];
-        
-        // Update the local tweet model
-        self.tweet.retweeted = YES;
-        self.tweet.retweetCount += 1;
-        
-        // Update cell UI
-        NSString *retwCount = [NSString stringWithFormat:@"%d", self.tweet.retweetCount];
-        self.retweetCount.text = [retwCount stringByAppendingFormat:@" RETWEETS"];
-        
-        // Send a POST requrest to the POST statuses/retweet/:id endpoint
-        [[APIManager shared] retweet:self.tweet alreadyRetweeted:NO completion:^(Tweet *tweet, NSError *error) {
-            if (error) {
-                NSLog(@"Error retweeting tweet: %@", error.localizedDescription);
-             } else {
-                 // nothing, all good
-             }
-         }];
-    }
+    [self.tweetVM retweetTweet];
+    [self setTweetVM:self.tweetVM];
+    [[APIManager shared] retweet:self.tweetVM completion:^(TweetViewModel *tweetVM, NSError *error) {
+     if (error) {
+         NSLog(@"Error retweeting/unretweeting tweet: %@", error.localizedDescription);
+      } else {
+          // nothing, all good
+      }
+    }];
 }
+
 - (IBAction)didTapFavorite:(id)sender {
-    // Unfavorite
-    if (self.tweet.favorited == YES) {
-        //Update image
-        UIImage *notLikedImage = [UIImage imageNamed:@"favor-icon.png"];
-        [self.favoriteButton setImage:notLikedImage forState:UIControlStateNormal];
-        
-        // Update the local tweet model
-        self.tweet.favorited = NO;
-        self.tweet.favoriteCount -= 1;
-        
-        // Update cell UI
-        NSString *favCount = [NSString stringWithFormat:@"%d", self.tweet.favoriteCount];
-        self.favoriteCount.text = [favCount stringByAppendingFormat:@" FAVORITES"];
-        
-        // Send a POST requrest to the POST favorites/destroy endpoint
-        [[APIManager shared] favorite:self.tweet alreadyFavorited:YES completion:^(Tweet *tweet, NSError *error) {
-            if (error) {
-                NSLog(@"Error unfavoriting tweet: %@", error.localizedDescription);
-             } else {
-                 // nothing, all good
-             }
-         }];
-    } else { // Favorite
-        // Update image
-        UIImage *likedImage = [UIImage imageNamed:@"favor-icon-red.png"];
-        [self.favoriteButton setImage:likedImage forState:UIControlStateNormal];
-        
-        // Update the local tweet model
-        self.tweet.favorited = YES;
-        self.tweet.favoriteCount += 1;
-        
-        // Update cell UI
-        NSString *favCount = [NSString stringWithFormat:@"%d", self.tweet.favoriteCount];
-        self.favoriteCount.text = [favCount stringByAppendingFormat:@" FAVORITES"];
-        
-        // Send a POST requrest to the POST favorites/create endpoint
-        [[APIManager shared] favorite:self.tweet alreadyFavorited:NO completion:^(Tweet *tweet, NSError *error) {
-            if (error) {
-                NSLog(@"Error favoriting tweet: %@", error.localizedDescription);
-             } else {
-                 // nothing, all good
-             }
-         }];
-    }
+    [self.tweetVM favoriteTweet];
+    [self setTweetVM:self.tweetVM];
+    [[APIManager shared] favorite:self.tweetVM completion:^(TweetViewModel *tweetVM, NSError *error) {
+        if (error) {
+            NSLog(@"Error favoriting/unfavoriting tweet: %@", error.localizedDescription);
+         } else {
+             // nothing, all good
+         }
+     }];
+}
+
+- (void)setTweetVM:(TweetViewModel *)tweetVM {
+    _tweetVM = tweetVM;
+    
+    self.name.text = tweetVM.name;
+    self.username.text = tweetVM.username;
+    self.text.text = tweetVM.tweetText;
+    self.date.text = tweetVM.date;
+    
+    self.retweetCount.text = [tweetVM.retweetCount stringByAppendingFormat:@" RETWEETS"];
+    
+    self.favoriteCount.text = [tweetVM.favoriteCount stringByAppendingFormat:@" FAVORITES"];
+    
+    // Profile Picture
+    [self.profilePicture setImageWithURL:tweetVM.profilePictureUrl];
+    
+    self.wasRetweet.hidden = tweetVM.shouldWhoRetweetedHide;
+    [self.wasRetweet setTitle:tweetVM.whoRetweeted forState:UIControlStateNormal];
+    
+    // Like Button Image
+    [self.favoriteButton setImage:tweetVM.favoriteButtonImage forState:UIControlStateNormal];
+    
+    // Retweet Button Image
+    [self.retweetButton setImage:tweetVM.retweetButtonImage forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.name.text = self.tweet.user.name;
-    self.username.text = [NSString stringWithFormat:@"@%@", self.tweet.user.screenName];
-    self.text.text = self.tweet.text;
-    self.date.text = self.tweet.createdAtString;
-    
-    NSString *retwCount = [NSString stringWithFormat:@"%d", self.tweet.retweetCount];
-    self.retweetCount.text = [retwCount stringByAppendingFormat:@" RETWEETS"];
-    
-    NSString *favCount = [NSString stringWithFormat:@"%d", self.tweet.favoriteCount];
-    self.favoriteCount.text = [favCount stringByAppendingFormat:@" FAVORITES"];
-    
-    // Profile Picture
-    self.profilePicture.image = nil;
-    if (self.tweet.user.profilePicture != nil) {
-        NSString *URLString = self.tweet.user.profilePicture;
-        NSString *QualityURL = [URLString stringByReplacingOccurrencesOfString:@"_normal" withString:@""];
-        NSURL *url = [NSURL URLWithString:QualityURL];
-        [self.profilePicture setImageWithURL:url];
-    }
-    
-    if (self.tweet.retweetedByUser) {
-        NSString *retweetedBy = self.tweet.retweetedByUser.name;
-        retweetedBy = [retweetedBy stringByAppendingFormat:@" retweeted"];
-        self.wasRetweet.hidden = NO;
-        [self.wasRetweet setTitle:retweetedBy forState:UIControlStateNormal];
-    } else {
-        self.wasRetweet.hidden = YES;
-    }
     
     // Reply Button Text
     [self.replyButton setTitle:@"" forState:UIControlStateNormal];
@@ -164,26 +96,12 @@
     [self.favoriteButton setTitle:@"" forState:UIControlStateSelected];
     [self.favoriteButton setTitle:@"" forState:UIControlStateHighlighted];
     
-    // Like Button Image
-    UIImage *notLikedImage = [UIImage imageNamed:@"favor-icon.png"];
-    UIImage *likedImage = [UIImage imageNamed:@"favor-icon-red.png"];
-    if (self.tweet.favorited)
-        [self.favoriteButton setImage:likedImage forState:UIControlStateNormal];
-    else
-        [self.favoriteButton setImage:notLikedImage forState:UIControlStateNormal];
-    
     // Retweet Button Text
     [self.retweetButton setTitle:@"" forState:UIControlStateNormal];
     [self.retweetButton setTitle:@"" forState:UIControlStateSelected];
     [self.retweetButton setTitle:@"" forState:UIControlStateHighlighted];
     
-    // Retweet Button Image
-    UIImage *notRetweetedImage = [UIImage imageNamed:@"retweet-icon.png"];
-    UIImage *retweetedImage = [UIImage imageNamed:@"retweet-icon-green.png"];
-    if (self.tweet.retweeted)
-        [self.retweetButton setImage:retweetedImage forState:UIControlStateNormal];
-    else
-        [self.retweetButton setImage:notRetweetedImage forState:UIControlStateNormal];
+    [self setTweetVM:self.tweetVM];
 }
 
 @end

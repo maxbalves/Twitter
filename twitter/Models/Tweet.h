@@ -6,7 +6,10 @@
 //  Copyright © 2022 Emerson Malca. All rights reserved.
 //
 
+// Frameworks
 #import <Foundation/Foundation.h>
+
+// Models
 #import "User.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -22,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL retweeted; // Configure retweet button
 @property (nonatomic, strong) User *user; // Contains Tweet author's name, screenname, etc.
 @property (nonatomic, strong) NSString *createdAtString; // Display date
+@property (nonatomic, strong) NSString *createdAtStringShort; // Display date short
 
 // For Retweets
 @property (nonatomic, strong) User *retweetedByUser;  // If the tweet is a retweet, this will be the user who retweeted

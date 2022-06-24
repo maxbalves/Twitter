@@ -6,9 +6,12 @@
 //  Copyright © 2022 Emerson Malca. All rights reserved.
 //
 
+// Frameworks
+#import "DateTools.h"
+
+// Models
 #import "Tweet.h"
 #import "User.h"
-#import "DateTools.h"
 
 @implementation Tweet
 
@@ -52,17 +55,12 @@
         formatter.dateStyle = NSDateFormatterShortStyle;
         formatter.timeStyle = NSDateFormatterNoStyle;
         
-        // Convert to short time style
-        self.createdAtString = date.shortTimeAgoSinceNow;
-        
-        // If more than a day ago, use MM/DD/YY format
-        if ([self.createdAtString containsString:@"d"])
-            self.createdAtString = [formatter stringFromDate:date];
+        self.createdAtStringShort = date.shortTimeAgoSinceNow;
+        self.createdAtString = [formatter stringFromDate:date];
     }
     return self;
 }
 
-// Factory Method
 + (NSMutableArray *)tweetsWithArray:(NSArray *)dictionaries {
     NSMutableArray *tweets = [NSMutableArray array];
     for (NSDictionary *dictionary in dictionaries) {

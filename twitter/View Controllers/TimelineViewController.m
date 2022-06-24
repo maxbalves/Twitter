@@ -6,27 +6,35 @@
 //  Copyright © 2018 Emerson Malca. All rights reserved.
 //
 
-#import "TimelineViewController.h"
+// APIs
 #import "APIManager.h"
 #import "AppDelegate.h"
-#import "LoginViewController.h"
-#import "Tweet.h"
-#import "TweetCell.h"
+
+// ViewControllers
 #import "ComposeViewController.h"
 #import "DetailViewController.h"
+#import "LoginViewController.h"
+#import "TimelineViewController.h"
+
+// Views
+#import "TweetCell.h"
+
+// ViewModels
+#import "TweetViewModel.h"
 
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) NSMutableArray *arrayOfTweets;
+@property (nonatomic, strong) NSMutableArray *arrayOfTweetVMs;
 @property (strong, nonatomic) IBOutlet UIButton *tweetButton;
+
 
 @end
 
 @implementation TimelineViewController
 
-- (void) didTweet:(Tweet *)tweet {
-    [self.arrayOfTweets insertObject:tweet atIndex:0];
+- (void) didTweet:(TweetViewModel *)tweetVM {
+    [self.arrayOfTweetVMs insertObject:tweetVM atIndex:0];
     [self.tableView reloadData];
 }
 
@@ -34,9 +42,9 @@
     [refreshControl beginRefreshing];
     
     // Get timeline
-    [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
-        if (tweets) {
-            self.arrayOfTweets = (NSMutableArray *)tweets;
+    [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweetVMs, NSError *error) {
+        if (tweetVMs) {
+            self.arrayOfTweetVMs = (NSMutableArray *)tweetVMs;
             [self.tableView reloadData];
             [refreshControl endRefreshing];
         } else {
@@ -86,13 +94,13 @@
 
 - (TweetCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TweetCell" forIndexPath:indexPath];
-    cell.tweet = self.arrayOfTweets[indexPath.row];
+    cell.tweetVM = self.arrayOfTweetVMs[indexPath.row];
     
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.arrayOfTweets.count >= 20 ? 20 : self.arrayOfTweets.count;
+    return self.arrayOfTweetVMs.count >= 20 ? 20 : self.arrayOfTweetVMs.count;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -108,7 +116,8 @@
         composeController.delegate = self;
     } else if ([segue.identifier isEqualToString:@"DetailSegue"]) {
         DetailViewController *detailController = [segue destinationViewController];
-        detailController.tweet = self.arrayOfTweets[[self.tableView indexPathForCell:sender].row];
+        // Hacky way to force the view to load: detailController.view;
+        detailController.tweetVM = self.arrayOfTweetVMs[[self.tableView indexPathForCell:sender].row];
     }
 }
 

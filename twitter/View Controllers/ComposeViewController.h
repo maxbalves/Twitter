@@ -6,14 +6,17 @@
 //  Copyright © 2022 Emerson Malca. All rights reserved.
 //
 
+// ViewModels
+#import "TweetViewModel.h"
+
+// Frameworks
 #import <UIKit/UIKit.h>
-#import "Tweet.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ComposeViewControllerDelegate
 
-- (void)didTweet:(Tweet *)tweet;
+- (void)didTweet:(TweetViewModel *)tweet;
 
 @end
 

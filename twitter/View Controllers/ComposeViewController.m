@@ -6,8 +6,11 @@
 //  Copyright © 2022 Emerson Malca. All rights reserved.
 //
 
-#import "ComposeViewController.h"
+// APIs
 #import "APIManager.h"
+
+// ViewControllers
+#import "ComposeViewController.h"
 
 
 @interface ComposeViewController () <UITextViewDelegate>
@@ -52,11 +55,11 @@
 }
 
 - (IBAction)clickedTweet:(id)sender {
-    [[APIManager new] postStatusWithText:self.text.text completion:^(Tweet *tweet, NSError *error) {
+    [[APIManager new] postStatusWithText:self.text.text completion:^(TweetViewModel *tweetVM, NSError *error) {
         if (error) {
             NSLog(@"Error composing Tweet: %@", error.localizedDescription);
         } else {
-            [self.delegate didTweet:tweet];
+            [self.delegate didTweet:tweetVM];
             [self clickedClose:self.closeButton];
         }
     }];

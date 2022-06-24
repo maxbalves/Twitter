@@ -6,14 +6,20 @@
 //  Copyright © 2022 Emerson Malca. All rights reserved.
 //
 
+// ViewModels
+#import "TweetViewModel.h"
+
+// Frameworks
 #import <UIKit/UIKit.h>
-#import "Tweet.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DetailViewController : UIViewController
 
-@property (nonatomic, strong) Tweet *tweet;
+@property (nonatomic, strong) TweetViewModel *tweetVM;
+
+- (void)setTweetVM:(TweetViewModel *)tweetVM;
+
 
 @end
 

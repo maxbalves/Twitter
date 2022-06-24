@@ -6,21 +6,24 @@
 //  Copyright © 2018 Emerson Malca. All rights reserved.
 //
 
+// Session Manager (Not Sure of Category)
 #import "BDBOAuth1SessionManager.h"
 #import "BDBOAuth1SessionManager+SFAuthenticationSession.h"
-#import "Tweet.h"
+
+// ViewModels
+#import "TweetViewModel.h"
 
 @interface APIManager : BDBOAuth1SessionManager
 
 + (instancetype)shared;
 
-- (void)getHomeTimelineWithCompletion:(void(^)(NSArray *tweets, NSError *error))completion;
+- (void)getHomeTimelineWithCompletion:(void(^)(NSArray *tweetVMs, NSError *error))completion;
 
-- (void)postStatusWithText:(NSString *)text completion:(void (^)(Tweet *, NSError *))completion;
+- (void)postStatusWithText:(NSString *)text completion:(void (^)(TweetViewModel *, NSError *))completion;
 
-- (void)favorite:(Tweet *)tweet alreadyFavorited:(BOOL)isFavorite completion:(void (^)(Tweet *, NSError *))completion;
+- (void)favorite:(TweetViewModel *)tweetVM completion:(void (^)(TweetViewModel *, NSError *))completion;
 
-- (void)retweet:(Tweet *)tweet alreadyRetweeted:(BOOL)isFavorited completion:(void (^)(Tweet *, NSError *))completion;
+- (void)retweet:(TweetViewModel *)tweetVM completion:(void (^)(TweetViewModel *, NSError *))completion;
 
 
 @end
