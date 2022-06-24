@@ -116,7 +116,6 @@
         composeController.delegate = self;
     } else if ([segue.identifier isEqualToString:@"DetailSegue"]) {
         DetailViewController *detailController = [segue destinationViewController];
-        // Hacky way to force the view to load: detailController.view;
         detailController.tweetVM = self.arrayOfTweetVMs[[self.tableView indexPathForCell:sender].row];
     }
 }

@@ -22,7 +22,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *profilePicture;
 @property (strong, nonatomic) IBOutlet UILabel *name;
 @property (strong, nonatomic) IBOutlet UILabel *username;
-@property (strong, nonatomic) IBOutlet UILabel *text;
+@property (strong, nonatomic) IBOutlet UITextView *text;
 @property (strong, nonatomic) IBOutlet UILabel *date;
 @property (strong, nonatomic) IBOutlet UILabel *retweetCount;
 @property (strong, nonatomic) IBOutlet UILabel *favoriteCount;

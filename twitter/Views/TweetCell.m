@@ -21,7 +21,7 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *name;
 @property (strong, nonatomic) IBOutlet UILabel *username;
-@property (strong, nonatomic) IBOutlet UILabel *tweetText;
+@property (strong, nonatomic) IBOutlet UITextView *tweetText;
 @property (strong, nonatomic) IBOutlet UILabel *date;
 
 @property (strong, nonatomic) IBOutlet UIButton *likeButton;
