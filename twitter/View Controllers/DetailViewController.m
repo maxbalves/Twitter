@@ -9,6 +9,7 @@
 #import "DetailViewController.h"
 #import "APIManager.h"
 #import "UIImageView+AFNetworking.h"
+#import "ComposeViewController.h"
 
 @interface DetailViewController ()
 
@@ -34,36 +35,42 @@
         //Update image
         UIImage *notRetweetedImage = [UIImage imageNamed:@"retweet-icon.png"];
         [self.retweetButton setImage:notRetweetedImage forState:UIControlStateNormal];
+        
         // Update the local tweet model
         self.tweet.retweeted = NO;
         self.tweet.retweetCount -= 1;
+        
         // Update cell UI
         NSString *retwCount = [NSString stringWithFormat:@"%d", self.tweet.retweetCount];
         self.retweetCount.text = [retwCount stringByAppendingFormat:@" RETWEETS"];
-        // Send a POST requrest to the POST favorites/create endpoint
+        
+        // Send a POST requrest to the POST statuses/unretweet/:id endpoint
         [[APIManager shared] retweet:self.tweet alreadyRetweeted:YES completion:^(Tweet *tweet, NSError *error) {
             if(error){
                 NSLog(@"Error unretweeting tweet: %@", error.localizedDescription);
              } else {
-                 // NSLog(@"Successfully unretweeted the following Tweet: %@", tweet.text);
+                 // nothing, all good
              }
          }];
     } else { // Retweet
         // Update image
         UIImage *retweetedImage = [UIImage imageNamed:@"retweet-icon-green.png"];
         [self.retweetButton setImage:retweetedImage forState:UIControlStateNormal];
+        
         // Update the local tweet model
         self.tweet.retweeted = YES;
         self.tweet.retweetCount += 1;
+        
         // Update cell UI
         NSString *retwCount = [NSString stringWithFormat:@"%d", self.tweet.retweetCount];
         self.retweetCount.text = [retwCount stringByAppendingFormat:@" RETWEETS"];
-        // Send a POST requrest to the POST favorites/create endpoint
+        
+        // Send a POST requrest to the POST statuses/retweet/:id endpoint
         [[APIManager shared] retweet:self.tweet alreadyRetweeted:NO completion:^(Tweet *tweet, NSError *error) {
             if(error){
                 NSLog(@"Error retweeting tweet: %@", error.localizedDescription);
              } else {
-                 // NSLog(@"Successfully retweeted the following Tweet: %@", tweet.text);
+                 // nothing, all good
              }
          }];
     }
@@ -74,36 +81,42 @@
         //Update image
         UIImage *notLikedImage = [UIImage imageNamed:@"favor-icon.png"];
         [self.favoriteButton setImage:notLikedImage forState:UIControlStateNormal];
+        
         // Update the local tweet model
         self.tweet.favorited = NO;
         self.tweet.favoriteCount -= 1;
+        
         // Update cell UI
         NSString *favCount = [NSString stringWithFormat:@"%d", self.tweet.favoriteCount];
         self.favoriteCount.text = [favCount stringByAppendingFormat:@" FAVORITES"];
-        // Send a POST requrest to the POST favorites/create endpoint
+        
+        // Send a POST requrest to the POST favorites/destroy endpoint
         [[APIManager shared] favorite:self.tweet alreadyFavorited:YES completion:^(Tweet *tweet, NSError *error) {
             if(error){
                 NSLog(@"Error unfavoriting tweet: %@", error.localizedDescription);
              } else {
-                 // NSLog(@"Successfully unfavorited the following Tweet: %@", tweet.text);
+                 // nothing, all good
              }
          }];
     } else { // Favorite
         // Update image
         UIImage *likedImage = [UIImage imageNamed:@"favor-icon-red.png"];
         [self.favoriteButton setImage:likedImage forState:UIControlStateNormal];
+        
         // Update the local tweet model
         self.tweet.favorited = YES;
         self.tweet.favoriteCount += 1;
+        
         // Update cell UI
         NSString *favCount = [NSString stringWithFormat:@"%d", self.tweet.favoriteCount];
         self.favoriteCount.text = [favCount stringByAppendingFormat:@" FAVORITES"];
+        
         // Send a POST requrest to the POST favorites/create endpoint
         [[APIManager shared] favorite:self.tweet alreadyFavorited:NO completion:^(Tweet *tweet, NSError *error) {
             if(error){
                 NSLog(@"Error favoriting tweet: %@", error.localizedDescription);
              } else {
-                 // NSLog(@"Successfully favorited the following Tweet: %@", tweet.text);
+                 // nothing, all good
              }
          }];
     }
@@ -142,8 +155,6 @@
     }
     
     // Reply Button Text
-    // Reply Count is not able to be retrieved by the API
-    // NSString *replyCount = [NSString stringWithFormat:@"%d", self.tweet.replyCount];
     [self.replyButton setTitle:@"" forState:UIControlStateNormal];
     [self.replyButton setTitle:@"" forState:UIControlStateSelected];
     [self.replyButton setTitle:@"" forState:UIControlStateHighlighted];
@@ -174,15 +185,5 @@
     else
         [self.retweetButton setImage:notRetweetedImage forState:UIControlStateNormal];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

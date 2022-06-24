@@ -25,6 +25,7 @@
             // Change tweet to original tweet
             dictionary = originalTweet;
         }
+        
         self.idStr = dictionary[@"id_str"];
         self.text = dictionary[@"full_text"];
         self.replyCount = [dictionary[@"reply_count"] intValue];        
@@ -33,22 +34,25 @@
         self.retweetCount = [dictionary[@"retweet_count"] intValue];
         self.retweeted = [dictionary[@"retweeted"] boolValue];
 
-        // TODO: initialize user
+        // initialize user
         NSDictionary *user = dictionary[@"user"];
         self.user = [[User alloc] initWithDictionary:user];
         
-        // TODO: Format and set createdAtString
+        // Format and set createdAtString
         NSString *createdAtOriginalString = dictionary[@"created_at"];
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        
         // Configure the input format to parse the date string
         formatter.dateFormat = @"E MMM d HH:mm:ss Z y";
+        
         // Convert String to Date
         NSDate *date = [formatter dateFromString:createdAtOriginalString];
+        
         // Configure output format
         formatter.dateStyle = NSDateFormatterShortStyle;
         formatter.timeStyle = NSDateFormatterNoStyle;
-        // Convert Date to String
         
+        // Convert to short time style
         self.createdAtString = date.shortTimeAgoSinceNow;
         
         // If more than a day ago, use MM/DD/YY format
@@ -58,8 +62,7 @@
     return self;
 }
 
-// Factory Method - differs from instance methods because
-
+// Factory Method
 + (NSMutableArray *)tweetsWithArray:(NSArray *)dictionaries {
     NSMutableArray *tweets = [NSMutableArray array];
     for (NSDictionary *dictionary in dictionaries) {

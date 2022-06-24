@@ -179,7 +179,7 @@
                                             <outlet property="profilePicture" destination="Rjm-y4-ZCy" id="F2Z-St-IVX"/>
                                             <outlet property="replyButton" destination="vaP-79-lDK" id="9et-br-W8m"/>
                                             <outlet property="retweetButton" destination="7On-Zk-iCN" id="fJ4-18-YD6"/>
-                                            <outlet property="tweetText" destination="viX-Ek-WrS" id="Spo-mF-UyW"/>
+                                            <outlet property="tweetText" destination="viX-Ek-WrS" id="C17-D8-0ID"/>
                                             <outlet property="username" destination="489-pm-NWI" id="sNI-2p-ZcR"/>
                                             <segue destination="jGN-IX-Lrb" kind="show" identifier="DetailSegue" id="vaE-bg-nih"/>
                                         </connections>

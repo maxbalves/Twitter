@@ -30,16 +30,11 @@ static NSString * const baseURLString = @"https://api.twitter.com";
     
     NSURL *baseURL = [NSURL URLWithString:baseURLString];
     
-    // TODO: fix code below to pull API Keys from your new Keys.plist file
-    
+    // API Keys from our new Keys.plist file
     NSString *path = [[NSBundle mainBundle] pathForResource: @"Keys" ofType: @"plist"];;
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];;
     NSString *key = [dict objectForKey:@"consumer_Key"];
     NSString *secret = [dict objectForKey:@"consumer_Secret"];
-    
-    // NSLog(@"key: %@", key);
-    // NSLog(@"secret: %@", secret);
-    
     
     // Check for launch arguments override
     if ([[NSUserDefaults standardUserDefaults] stringForKey:@"consumer-key"]) {
@@ -50,9 +45,7 @@ static NSString * const baseURLString = @"https://api.twitter.com";
     }
     
     self = [super initWithBaseURL:baseURL consumerKey:key consumerSecret:secret];
-    if (self) {
-        
-    }
+
     return self;
 }
 
@@ -98,6 +91,7 @@ static NSString * const baseURLString = @"https://api.twitter.com";
     }];
 }
 
+// Retweet (or Unretweet) Tweet Method
 - (void)retweet:(Tweet *)tweet alreadyRetweeted:(BOOL)isRetweeted completion:(void (^)(Tweet *, NSError *))completion {
     NSString *retweetOrUnretweet = @"retweet";
     if (isRetweeted == YES)

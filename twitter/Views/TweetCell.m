@@ -15,8 +15,8 @@
 @property (strong, nonatomic) IBOutlet UIImageView *profilePicture;
 
 @property (strong, nonatomic) IBOutlet UILabel *name;
-@property (strong, nonatomic) IBOutlet UILabel *tweetText;
 @property (strong, nonatomic) IBOutlet UILabel *username;
+@property (strong, nonatomic) IBOutlet UILabel *tweetText;
 @property (strong, nonatomic) IBOutlet UILabel *date;
 
 @property (strong, nonatomic) IBOutlet UIButton *likeButton;
@@ -37,7 +37,7 @@
 - (void)setTweet:(Tweet *)tweet {
     // Since we're replacing the default setter, we have to set the underlying private storage _tweet ourselves.
     // _tweet was an automatically declared variable with the @propery declaration.
-    // You need to do this any time you create a custom setter.    
+    // Do this any time you create a custom setter.
     _tweet = tweet;
 
     self.name.text = self.tweet.user.name;
@@ -46,8 +46,6 @@
     self.date.text = self.tweet.createdAtString;
     
     // Reply Button Text
-    // Reply Count is not able to be retrieved by the API
-    // NSString *replyCount = [NSString stringWithFormat:@"%d", self.tweet.replyCount];
     [self.replyButton setTitle:@"" forState:UIControlStateNormal];
     [self.replyButton setTitle:@"" forState:UIControlStateSelected];
     [self.replyButton setTitle:@"" forState:UIControlStateHighlighted];
@@ -96,34 +94,40 @@
         //Update image
         UIImage *notLikedImage = [UIImage imageNamed:@"favor-icon.png"];
         [self.likeButton setImage:notLikedImage forState:UIControlStateNormal];
+        
         // Update the local tweet model
         self.tweet.favorited = NO;
         self.tweet.favoriteCount -= 1;
+        
         // Update cell UI
         [self setTweet:self.tweet];
-        // Send a POST requrest to the POST favorites/create endpoint
+        
+        // Send a POST requrest to the POST favorites/destroy endpoint
         [[APIManager shared] favorite:self.tweet alreadyFavorited:YES completion:^(Tweet *tweet, NSError *error) {
             if(error){
                 NSLog(@"Error unfavoriting tweet: %@", error.localizedDescription);
              } else {
-                 // NSLog(@"Successfully unfavorited the following Tweet: %@", tweet.text);
+                 // nothing, all good
              }
          }];
     } else { // Favorite
         // Update image
         UIImage *likedImage = [UIImage imageNamed:@"favor-icon-red.png"];
         [self.likeButton setImage:likedImage forState:UIControlStateNormal];
+        
         // Update the local tweet model
         self.tweet.favorited = YES;
         self.tweet.favoriteCount += 1;
+        
         // Update cell UI
         [self setTweet:self.tweet];
+        
         // Send a POST requrest to the POST favorites/create endpoint
         [[APIManager shared] favorite:self.tweet alreadyFavorited:NO completion:^(Tweet *tweet, NSError *error) {
             if(error){
                 NSLog(@"Error favoriting tweet: %@", error.localizedDescription);
              } else {
-                 // NSLog(@"Successfully favorited the following Tweet: %@", tweet.text);
+                 //nothing, all good
              }
          }];
     }
@@ -135,43 +139,48 @@
         //Update image
         UIImage *notRetweetedImage = [UIImage imageNamed:@"retweet-icon.png"];
         [self.retweetButton setImage:notRetweetedImage forState:UIControlStateNormal];
+        
         // Update the local tweet model
         self.tweet.retweeted = NO;
         self.tweet.retweetCount -= 1;
+        
         // Update cell UI
         [self setTweet:self.tweet];
-        // Send a POST requrest to the POST favorites/create endpoint
+        
+        // Send a POST requrest to the POST statuses/unretweet/:id endpoint
         [[APIManager shared] retweet:self.tweet alreadyRetweeted:YES completion:^(Tweet *tweet, NSError *error) {
             if(error){
                 NSLog(@"Error unretweeting tweet: %@", error.localizedDescription);
              } else {
-                 // NSLog(@"Successfully unretweeted the following Tweet: %@", tweet.text);
+                 // nothing, all good
              }
          }];
     } else { // Retweet
         // Update image
         UIImage *retweetedImage = [UIImage imageNamed:@"retweet-icon-green.png"];
         [self.retweetButton setImage:retweetedImage forState:UIControlStateNormal];
+        
         // Update the local tweet model
         self.tweet.retweeted = YES;
         self.tweet.retweetCount += 1;
+        
         // Update cell UI
         [self setTweet:self.tweet];
-        // Send a POST requrest to the POST favorites/create endpoint
+        
+        // Send a POST requrest to the POST statuses/retweet/:id endpoint
         [[APIManager shared] retweet:self.tweet alreadyRetweeted:NO completion:^(Tweet *tweet, NSError *error) {
             if(error){
                 NSLog(@"Error retweeting tweet: %@", error.localizedDescription);
              } else {
-                 // NSLog(@"Successfully retweeted the following Tweet: %@", tweet.text);
+                 // nothing, all good
              }
          }];
     }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
     // Configure the view for the selected state
+    [super setSelected:selected animated:animated];
 }
 
 @end
