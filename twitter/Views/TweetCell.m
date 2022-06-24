@@ -104,7 +104,7 @@
         
         // Send a POST requrest to the POST favorites/destroy endpoint
         [[APIManager shared] favorite:self.tweet alreadyFavorited:YES completion:^(Tweet *tweet, NSError *error) {
-            if(error){
+            if (error) {
                 NSLog(@"Error unfavoriting tweet: %@", error.localizedDescription);
              } else {
                  // nothing, all good
@@ -124,7 +124,7 @@
         
         // Send a POST requrest to the POST favorites/create endpoint
         [[APIManager shared] favorite:self.tweet alreadyFavorited:NO completion:^(Tweet *tweet, NSError *error) {
-            if(error){
+            if (error) {
                 NSLog(@"Error favoriting tweet: %@", error.localizedDescription);
              } else {
                  //nothing, all good
@@ -149,7 +149,7 @@
         
         // Send a POST requrest to the POST statuses/unretweet/:id endpoint
         [[APIManager shared] retweet:self.tweet alreadyRetweeted:YES completion:^(Tweet *tweet, NSError *error) {
-            if(error){
+            if (error) {
                 NSLog(@"Error unretweeting tweet: %@", error.localizedDescription);
              } else {
                  // nothing, all good
@@ -169,7 +169,7 @@
         
         // Send a POST requrest to the POST statuses/retweet/:id endpoint
         [[APIManager shared] retweet:self.tweet alreadyRetweeted:NO completion:^(Tweet *tweet, NSError *error) {
-            if(error){
+            if (error) {
                 NSLog(@"Error retweeting tweet: %@", error.localizedDescription);
              } else {
                  // nothing, all good

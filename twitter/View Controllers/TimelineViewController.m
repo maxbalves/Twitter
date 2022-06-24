@@ -84,19 +84,18 @@
     [[APIManager shared] logout];
 }
 
-- (TweetCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (TweetCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TweetCell" forIndexPath:indexPath];
     cell.tweet = self.arrayOfTweets[indexPath.row];
     
     return cell;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.arrayOfTweets.count >= 20 ? 20 : self.arrayOfTweets.count;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Prevents cell from having gray background due to being selected
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -107,7 +106,7 @@
         UINavigationController *navigationController = [segue destinationViewController];
         ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
         composeController.delegate = self;
-    } else if ([segue.identifier isEqualToString:@"DetailSegue"]){
+    } else if ([segue.identifier isEqualToString:@"DetailSegue"]) {
         DetailViewController *detailController = [segue destinationViewController];
         detailController.tweet = self.arrayOfTweets[[self.tableView indexPathForCell:sender].row];
     }

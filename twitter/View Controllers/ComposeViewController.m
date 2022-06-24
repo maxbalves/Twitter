@@ -19,7 +19,7 @@
 
 @implementation ComposeViewController
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     // Set the max character limit
     int characterLimit = 140;
 
