@@ -123,15 +123,6 @@
     }
 }
 
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-//    int height = scrollView.frame.size.height;
-//    int contentYoffset = scrollView.contentOffset.y;
-//    int distanceFromBottom = scrollView.contentSize.height - contentYoffset;
-//    if (distanceFromBottom < height) {
-//        NSLog(@":MBA: you reached the end!");
-//    }
-//}
-
 // Navigation Segue
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"ComposeSegue"]) {
