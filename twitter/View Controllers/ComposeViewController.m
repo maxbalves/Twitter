@@ -17,24 +17,30 @@
 
 @property (strong, nonatomic) IBOutlet UITextView *text;
 @property (strong, nonatomic) IBOutlet UIButton *closeButton;
+@property (strong, nonatomic) IBOutlet UILabel *characterCountLabel;
+
+@property (nonatomic) long unsigned TWEET_SIZE_MAX;
 
 @end
 
 @implementation ComposeViewController
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    // Set the max character limit
-    int characterLimit = 140;
 
     // Construct what the new text would be if we allowed the user's latest edit
     NSString *newText = [self.text.text stringByReplacingCharactersInRange:range withString:text];
     
+    self.characterCountLabel.text = [NSString stringWithFormat:@"%lu characters left", (self.TWEET_SIZE_MAX - newText.length)];
+    
     // Should the new text should be allowed? True/False
-    return newText.length < characterLimit;
+    return newText.length < self.TWEET_SIZE_MAX;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.TWEET_SIZE_MAX = 280;
+    self.characterCountLabel.text = [NSString stringWithFormat:@"%lu characters left", self.TWEET_SIZE_MAX];
     
     self.text.delegate = self;
 

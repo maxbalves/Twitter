@@ -399,20 +399,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="790"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="pOM-6T-Q5C">
-                                <rect key="frame" x="15" y="71" width="360" height="704"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="pOM-6T-Q5C">
+                                <rect key="frame" x="15" y="71" width="360" height="33"/>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BwX-g0-S4P">
+                                <rect key="frame" x="15" y="119" width="360" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="x0d-jz-ZZD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="pOM-6T-Q5C" firstAttribute="leading" secondItem="x0d-jz-ZZD" secondAttribute="leading" constant="15" id="74u-N7-ucH"/>
-                            <constraint firstItem="x0d-jz-ZZD" firstAttribute="bottom" secondItem="pOM-6T-Q5C" secondAttribute="bottom" constant="15" id="YR1-qB-z3f"/>
+                            <constraint firstItem="BwX-g0-S4P" firstAttribute="top" secondItem="pOM-6T-Q5C" secondAttribute="bottom" constant="15" id="KNU-Gy-TAG"/>
+                            <constraint firstItem="BwX-g0-S4P" firstAttribute="leading" secondItem="pOM-6T-Q5C" secondAttribute="leading" id="V6p-1a-fbf"/>
                             <constraint firstItem="pOM-6T-Q5C" firstAttribute="top" secondItem="x0d-jz-ZZD" secondAttribute="top" constant="15" id="dRx-kY-trI"/>
                             <constraint firstItem="x0d-jz-ZZD" firstAttribute="trailing" secondItem="pOM-6T-Q5C" secondAttribute="trailing" constant="15" id="hFW-ll-kn3"/>
+                            <constraint firstItem="x0d-jz-ZZD" firstAttribute="trailing" secondItem="BwX-g0-S4P" secondAttribute="trailing" constant="15" id="oML-Jf-rap"/>
+                            <constraint firstItem="x0d-jz-ZZD" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="BwX-g0-S4P" secondAttribute="bottom" constant="15" id="p2A-GL-us8"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Compose" id="VV2-I4-wjc">
@@ -440,6 +449,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="characterCountLabel" destination="BwX-g0-S4P" id="XEw-8R-cf2"/>
                         <outlet property="closeButton" destination="mjq-8X-F6K" id="2oI-34-DKB"/>
                         <outlet property="text" destination="pOM-6T-Q5C" id="vff-8Y-mCx"/>
                     </connections>
