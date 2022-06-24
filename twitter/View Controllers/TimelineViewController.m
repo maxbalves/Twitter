@@ -28,6 +28,8 @@
 @property (nonatomic, strong) NSMutableArray *arrayOfTweetVMs;
 @property (strong, nonatomic) IBOutlet UIButton *tweetButton;
 
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic) int MAX_TWEETS_SHOWN;
 
 @end
 
@@ -42,7 +44,7 @@
     [refreshControl beginRefreshing];
     
     // Get timeline
-    [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweetVMs, NSError *error) {
+    [[APIManager shared] getHomeTimelineWith:self.MAX_TWEETS_SHOWN TweetsAndCompletion:^(NSArray *tweetVMs, NSError *error) {
         if (tweetVMs) {
             self.arrayOfTweetVMs = (NSMutableArray *)tweetVMs;
             [self.tableView reloadData];
@@ -60,6 +62,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.MAX_TWEETS_SHOWN = 20;
+    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
@@ -70,12 +74,12 @@
     [self.tweetButton setTitle:@"" forState:UIControlStateSelected];
     [self.tweetButton setTitle:@"" forState:UIControlStateHighlighted];
     
-    UIRefreshControl *refreshControl = [UIRefreshControl new];
+    self.refreshControl = [UIRefreshControl new];
             
-    [refreshControl addTarget:self action:@selector(getTimeline:) forControlEvents:UIControlEventValueChanged];
-    [self.tableView insertSubview:refreshControl atIndex:0];
+    [self.refreshControl addTarget:self action:@selector(getTimeline:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView insertSubview:self.refreshControl atIndex:0];
     
-    [self getTimeline:(UIRefreshControl *)refreshControl];
+    [self getTimeline:self.refreshControl];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -100,13 +104,33 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.arrayOfTweetVMs.count >= 20 ? 20 : self.arrayOfTweetVMs.count;
+    return self.arrayOfTweetVMs.count >= self.MAX_TWEETS_SHOWN ? self.MAX_TWEETS_SHOWN : self.arrayOfTweetVMs.count;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Prevents cell from having gray background due to being selected
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row + 1 == self.arrayOfTweetVMs.count && self.MAX_TWEETS_SHOWN < 200) {
+        self.MAX_TWEETS_SHOWN *= 2;
+        
+        if (self.MAX_TWEETS_SHOWN > 200)
+            self.MAX_TWEETS_SHOWN = 200;
+        
+        [self getTimeline:self.refreshControl];
+    }
+}
+
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//    int height = scrollView.frame.size.height;
+//    int contentYoffset = scrollView.contentOffset.y;
+//    int distanceFromBottom = scrollView.contentSize.height - contentYoffset;
+//    if (distanceFromBottom < height) {
+//        NSLog(@":MBA: you reached the end!");
+//    }
+//}
 
 // Navigation Segue
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
